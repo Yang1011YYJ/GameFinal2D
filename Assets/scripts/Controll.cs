@@ -19,7 +19,7 @@ public class Controll : MonoBehaviour
     void Update()
     {
         float x = Input.GetAxis("Horizontal");
-        rig.AddForce(new Vector2(x * 10, 0));
+        rig.AddForce(new Vector3(x * 5, 0));
 
     }
 }
