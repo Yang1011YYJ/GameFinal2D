@@ -1,25 +1,4 @@
 
-# Unity auto-generated folders
-[Ll]ibrary/
-[Tt]emp/
-[Oo]bj/
-[Bb]uild/
-[Bb]uilds/
-[Ll]ogs/
-[Uu]ser[Ss]ettings/
-# Visual Studio / Rider / VSCode
-.vs/
-*.csproj
-*.sln
-*.user
-*.unityproj
-*.pidb
-*.booproj
-*.svd
-*.suo
-# OS junk
-.DS_Store
-Thumbs.db
 *.psd filter=lfs diff=lfs merge=lfs -text
 *.png filter=lfs diff=lfs merge=lfs -text
 *.jpg filter=lfs diff=lfs merge=lfs -text
