@@ -176,6 +176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   circlePrefab: {fileID: 3863535467395677558, guid: c13a8facddd44864682719f3a58302c2, type: 3}
   canvasRect: {fileID: 1443744032}
+  manager: {fileID: 0}
 --- !u!114 &239196433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,6 +324,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   circlePrefab: {fileID: 3863535467395677558, guid: c13a8facddd44864682719f3a58302c2, type: 3}
   canvasRect: {fileID: 1443744032}
+  manager: {fileID: 0}
 --- !u!114 &283356584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1475,6 +1477,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   circlePrefab: {fileID: 3863535467395677558, guid: c13a8facddd44864682719f3a58302c2, type: 3}
   canvasRect: {fileID: 1443744032}
+  manager: {fileID: 0}
 --- !u!114 &1494594952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1622,6 +1625,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   circlePrefab: {fileID: 3863535467395677558, guid: c13a8facddd44864682719f3a58302c2, type: 3}
   canvasRect: {fileID: 1443744032}
+  manager: {fileID: 0}
 --- !u!114 &1541964091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1729,6 +1733,7 @@ GameObject:
   - component: {fileID: 1577382528}
   - component: {fileID: 1577382531}
   - component: {fileID: 1577382532}
+  - component: {fileID: 1577382533}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -1812,6 +1817,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animationScript: {fileID: 0}
   BlackPanel: {fileID: 0}
+--- !u!114 &1577382533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1577382527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0d691bae9f58a441aa06669f6b200fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spots: []
+  totalCount: 0
+  foundCount: 0
+  text: {fileID: 1786686922}
 --- !u!1 &1747860244
 GameObject:
   m_ObjectHideFlags: 0
@@ -1900,6 +1921,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   circlePrefab: {fileID: 3863535467395677558, guid: c13a8facddd44864682719f3a58302c2, type: 3}
   canvasRect: {fileID: 1443744032}
+  manager: {fileID: 0}
 --- !u!114 &1777394777
 MonoBehaviour:
   m_ObjectHideFlags: 0
