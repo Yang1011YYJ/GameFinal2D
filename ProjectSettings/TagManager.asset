@@ -41,3 +41,27 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BG1
+    uniqueID: 2179082899
+    locked: 0
+  - name: CC
+    uniqueID: 2576163261
+    locked: 0
+  - name: ErrorPlace
+    uniqueID: 2468849739
+    locked: 0
+  - name: New Layer 6
+    uniqueID: 2992994455
+    locked: 0
+  - name: New Layer 8
+    uniqueID: 3397511429
+    locked: 0
+  - name: New Layer 7
+    uniqueID: 3322560913
+    locked: 0
+  - name: CircleLayer
+    uniqueID: 1865059151
+    locked: 0
+  - name: UI
+    uniqueID: 639806117
+    locked: 0
