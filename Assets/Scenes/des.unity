@@ -243,7 +243,7 @@ Transform:
   m_GameObject: {fileID: 35876372}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 34.3, y: -9, z: 9}
+  m_LocalPosition: {x: 32.9, y: -9, z: 9}
   m_LocalScale: {x: 3.8456404, y: 3.8456404, z: 3.8456404}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -586,8 +586,8 @@ Transform:
   m_GameObject: {fileID: 603385611}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 42.84, y: 22.15, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 73.6, y: 14.5, z: 0}
+  m_LocalScale: {x: 1.2475, y: 1.2475, z: 1.2475}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 666867994}
@@ -709,7 +709,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &711442680
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1387,14 +1387,13 @@ MonoBehaviour:
   TrainFront: {fileID: 1486259081}
   TrainBack: {fileID: 666867992}
   Train: {fileID: 603385611}
-  trainStartPoint: {fileID: 0}
-  trainStopPoint: {fileID: 0}
-  trainSpeed: 5
+  trainStartPoint: {fileID: 1688469461}
+  trainStopPoint: {fileID: 1940232748}
+  trainSpeed: 10
   DesPanel: {fileID: 396994186}
   BlackPanel: {fileID: 393068252}
   Player: {fileID: 35876372}
-  PlayerAnimation: {fileID: 0}
-  playerTransform: {fileID: 0}
+  playerTransform: {fileID: 35876378}
   walkSpeed: 5
   middlePoint: {fileID: 0}
   animationScript: {fileID: 0}
@@ -1557,7 +1556,7 @@ Transform:
   m_GameObject: {fileID: 1688469460}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 45.38, y: 0, z: 0}
+  m_LocalPosition: {x: 45.38, y: 10.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2099,7 +2098,7 @@ Transform:
   m_GameObject: {fileID: 1940232747}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.2, y: 3.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

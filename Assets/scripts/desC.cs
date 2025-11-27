@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class desC : MonoBehaviour
 {
@@ -23,7 +25,7 @@ public class desC : MonoBehaviour
 
     [Header("角色")]
     public GameObject Player;
-    public Animator PlayerAnimation;
+    Animator PlayerAnimator;
     [Tooltip("主角位置")] public Transform playerTransform;
     [Tooltip("主角走路速度")] public float walkSpeed = 5f;
     [Tooltip("走到的「中間」位置")] public Transform middlePoint;
@@ -36,12 +38,29 @@ public class desC : MonoBehaviour
     private void Awake()
     {
         animationScript = GetComponent<Animation>();
-        cControllScript = Player.GetComponentInChildren<CControll>();
-        PlayerAnimation = Player.GetComponentInChildren<Animator>();
+        cControllScript = Player.GetComponent<CControll>();
+        
 
     }
     private void Start()
     {
+        if (cControllScript == null)
+        {
+            cControllScript = Player.GetComponent<CControll>();
+        }
+
+        PlayerAnimator = cControllScript != null ? cControllScript.animator : null;
+
+        if (PlayerAnimator == null)
+        {
+            // 保險：自己找一次
+            PlayerAnimator = Player.GetComponentInChildren<Animator>();
+        }
+
+        if (PlayerAnimator == null)
+        {
+            Debug.LogError("[desC] 找不到 Player 的 Animator，請檢查 Player 階層。", this);
+        }
         BlackPanel.SetActive(false);
         PhoneMessage.SetActive(false);
         DesPanel.SetActive(false);
@@ -60,18 +79,18 @@ public class desC : MonoBehaviour
     {
         // 1. 
         Debug.Log("主角走進場景");
-        cControllScript.Target = new Vector2(11.1000004f, -8.89999962f);
+        cControllScript.Target = new Vector2(11.1000004f, -9.359639f);
         cControllScript.StartAutoMoveTo(cControllScript.Target);
 
         // 等他走到指定 X
         yield return new WaitUntil(() => cControllScript.autoMoveFinished);
-        PlayerAnimation.SetBool("walk",false);
+        PlayerAnimator.SetBool("walk",false);
 
 
         // 2. 
         Debug.Log("播放拿手機的動畫");
-        PlayerAnimation.SetBool("Phone", true);
-        yield return new WaitForSeconds(PlayerAnimation.GetCurrentAnimatorStateInfo(0).length);
+        PlayerAnimator.SetBool("phone", true);
+        yield return new WaitForSeconds(cControllScript.phone.length);
 
         // 3. 
         Debug.Log("顯示圖片 Panel");
@@ -79,7 +98,7 @@ public class desC : MonoBehaviour
 
         // 4. 
         Debug.Log("過幾秒後出現叉叉");
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(5f);
         CloseButton.SetActive(true);
 
         // 5. 
@@ -87,7 +106,7 @@ public class desC : MonoBehaviour
         bool closed = false;
         CloseButton.GetComponent<Button>().onClick.AddListener(() => closed = true);
         yield return new WaitUntil(() => closed);
-        PlayerAnimation.SetBool("Phone", false);
+        PlayerAnimator.SetBool("phone", false);
 
         //// 6. 黑幕淡入（0→1）
         //yield return StartCoroutine(animationScript.FadeIn(BlackPanel.GetComponent<CanvasGroup>(), 1f));
@@ -96,25 +115,29 @@ public class desC : MonoBehaviour
         Debug.Log("火車進站（用移動而不是 Animator）");
         Train.transform.position = trainStartPoint.position; // 先放到起始點
         yield return StartCoroutine(MoveToPoint(Train.transform, trainStopPoint.position, trainSpeed));
+        yield return new WaitUntil(() =>
+    Vector3.Distance(Train.transform.position, trainStopPoint.position) < 0.01f);
 
-        yield return new WaitForSeconds(5f);
 
         // 8. 
         Debug.Log("主角走向火車（被前景 sprite 遮住，看起來像上車）");
-        cControllScript.isAutoMoving = true;
-        cControllScript.Target = new Vector2(-3.6f, 0);
-        PlayerAnimation.SetBool("walk",true);
-        yield return new WaitForSeconds(5f);
+        cControllScript.Target = new Vector2(-4.1f, 4f);
+        cControllScript.StartAutoMoveTo(cControllScript.Target);
+        // 等他走到指定 X
+        yield return new WaitUntil(() => cControllScript.autoMoveFinished);
+        PlayerAnimator.SetBool("walk", false);
+        cControllScript.rig.bodyType = RigidbodyType2D.Kinematic;
 
         // 9. 
         Debug.Log("畫面再次淡出黑（可省略）");
-        yield return StartCoroutine(animationScript.FadeIn(BlackPanel.GetComponent<CanvasGroup>(), 1f));
+        BlackPanel.SetActive(true);
+        yield return StartCoroutine(animationScript.FadeOutAndChangeScene(BlackPanel.GetComponent<CanvasGroup>(), 1f,"00"));
 
         // 劇情全部跑完
         Debug.Log("劇情全部跑完");
         cControllScript.EnablePlayerControl();
         // 10. 切換場景
-        SceneManager.LoadScene("01");
+        SceneManager.LoadScene("00");
     }
     //移動位置
     IEnumerator MoveToPoint(Transform obj, Vector3 targetPos, float speed)
@@ -131,6 +154,7 @@ public class desC : MonoBehaviour
 
             yield return null;
         }
+        obj.position = targetPos; // 收尾精準貼到目標
     }
 
 }

@@ -32,10 +32,31 @@ public class CControll : MonoBehaviour
 
     void Awake()
     {
-        animator = GetComponentInChildren<Animator>();
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        rig = GetComponent<Rigidbody2D>();
-        isAutoMoving = false;
+        // Animator
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+            if (animator == null)
+                animator = GetComponentInChildren<Animator>();
+            if (animator == null)
+                animator = GetComponentInParent<Animator>();
+        }
+
+        // SpriteRenderer
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
+                spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            if (spriteRenderer == null)
+                spriteRenderer = GetComponentInParent<SpriteRenderer>();
+        }
+
+        // Rigidbody2D
+        if (rig == null)
+        {
+            rig = GetComponent<Rigidbody2D>();
+        }
     }
     void Start()
     {
@@ -63,8 +84,10 @@ public class CControll : MonoBehaviour
 
                 // 把座標修正到目標（避免物理晃一下）
                 Vector2 pos = transform.position;
-                pos= Target;
+                pos.x = Target.x;
                 transform.position = pos;
+                // 把剛才累積的速度清空，避免滑出去
+                rig.velocity = Vector2.zero;
             }
             else
             {
@@ -113,13 +136,30 @@ public class CControll : MonoBehaviour
 
     void FixedUpdate()
     {
-        // 角色移動 & 限速
-        rig.AddForce(new Vector2(x * moveSpeed, 0f));
+        if (isAutoMoving)
+        {
+            // 自動移動：直接往目標靠近，不用 AddForce
+            float step = moveSpeed * Time.fixedDeltaTime;
+            Vector2 current = rig.position;
+            Vector2 target = new Vector2(Target.x, Target.y); // 只看 X
 
-        rig.velocity = new Vector2(
-            Mathf.Clamp(rig.velocity.x, -maxSpeed, maxSpeed),
-            rig.velocity.y
-        );
+            Vector2 newPos = Vector2.MoveTowards(current, target, step);
+            rig.MovePosition(newPos);  // 或 transform.position = newPos 也行
+
+            // 這裡不要再 AddForce，也不要 clamp，完全自己控制
+        }
+        else
+        {
+            // 玩家控制：維持你原本的物理移動寫法
+            // 角色移動 & 限速
+            rig.AddForce(new Vector2(x * moveSpeed, 0f));
+
+            rig.velocity = new Vector2(
+                Mathf.Clamp(rig.velocity.x, -maxSpeed, maxSpeed),
+                rig.velocity.y
+            );
+        }
+        
     }
 
     /// <summary>
