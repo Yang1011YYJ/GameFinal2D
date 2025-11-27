@@ -62,9 +62,9 @@
     <Compile Include="Assets\scripts\First.cs" />
     <Compile Include="Assets\scripts\Animation.cs" />
     <Compile Include="Assets\scripts\CircleFill.cs" />
-    <Compile Include="Assets\scripts\SceneDes.cs" />
     <Compile Include="Assets\scripts\DifferenceSpot.cs" />
     <Compile Include="Assets\scripts\SceneMenu.cs" />
+    <Compile Include="Assets\scripts\desC.cs" />
     <Compile Include="Assets\scripts\CControll.cs" />
   </ItemGroup>
   <ItemGroup>
