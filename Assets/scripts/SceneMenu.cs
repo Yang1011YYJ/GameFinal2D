@@ -6,21 +6,29 @@ using UnityEngine.SceneManagement;
 public class SceneMenu : MonoBehaviour
 {
     [Header("腳本")]
-    public Animation animationScript;
+    public AnimationScript animationScript;
+    public SceneChange sceneChangeScript;
 
     [Header("其他")]
     public GameObject BlackPanel;//黑色遮罩
     private void Awake()
     {
-        animationScript = GetComponent<Animation>();
+        animationScript = GetComponent<AnimationScript>();
+        sceneChangeScript = GetComponent<SceneChange>();
         BlackPanel = GameObject.Find("BlackPanel");
     }
     private void Start()
     {
         BlackPanel.SetActive(false);
     }
-    public void SceneChange()
+    public void SceneChangeToDes()
     {
-        StartCoroutine(animationScript.FadeOutAndChangeScene(BlackPanel.GetComponent<CanvasGroup>(), 1.5f, "des"));
+        animationScript.Fade(
+            BlackPanel, 
+            1.5f,
+            0f,
+            1f,
+            () => sceneChangeScript.SceneC("des")
+        );
     }
 }

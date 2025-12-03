@@ -32,14 +32,15 @@ public class desC : MonoBehaviour
 
 
     [Header("腳本")]
-    public Animation animationScript;
+    public AnimationScript animationScript;
     public CControll cControllScript;
+    public SceneChange sceneChangeScript;
 
     private void Awake()
     {
-        animationScript = GetComponent<Animation>();
+        animationScript = GetComponent<AnimationScript>();
         cControllScript = Player.GetComponent<CControll>();
-        
+        sceneChangeScript = FindAnyObjectByType<SceneChange>();
 
     }
     private void Start()
@@ -66,14 +67,14 @@ public class desC : MonoBehaviour
         DesPanel.SetActive(false);
         StartCoroutine(SceneFlow());
     }
-    public void StartButton()
-    {
-        StartCoroutine(animationScript.FadeOutAndChangeScene(BlackPanel.GetComponent<CanvasGroup>(), 1.5f, "01"));
-    }
-    public void BackButton()
-    {
-        StartCoroutine(animationScript.FadeOutAndChangeScene(BlackPanel.GetComponent<CanvasGroup>(), 1.5f, "menu"));
-    }
+    //public void StartButton()
+    //{
+    //    animationScript.Fade(BlackPanel, 1.5f, "01"));
+    //}
+    //public void BackButton()
+    //{
+    //    StartCoroutine(animationScript.FadeOutAndChangeScene(BlackPanel.GetComponent<CanvasGroup>(), 1.5f, "menu"));
+    //}
 
     IEnumerator SceneFlow()
     {
@@ -130,8 +131,12 @@ public class desC : MonoBehaviour
 
         // 9. 
         Debug.Log("畫面再次淡出黑（可省略）");
-        BlackPanel.SetActive(true);
-        yield return StartCoroutine(animationScript.FadeOutAndChangeScene(BlackPanel.GetComponent<CanvasGroup>(), 1f,"00"));
+        animationScript.Fade(
+            BlackPanel, 
+            1f,
+            0f,
+            1f,
+            ()=>sceneChangeScript.SceneC("00"));
 
         // 劇情全部跑完
         Debug.Log("劇情全部跑完");

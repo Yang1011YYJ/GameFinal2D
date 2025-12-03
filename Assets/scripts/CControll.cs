@@ -26,7 +26,7 @@ public class CControll : MonoBehaviour
     [Tooltip("true = 玩家可以用方向鍵控制")]public bool playerControlEnabled = true;
     [Tooltip("是否正在自動移動")]public bool isAutoMoving = false;
     [Tooltip("自動移動的目標座標")] public Vector2 Target;
-    [Tooltip("判定抵達目標的容許誤差")]public float arriveThreshold = 0.05f;
+    [Tooltip("判定抵達目標的容許誤差")]public float arriveThreshold = 0.2f;
     [Tooltip("自動移動是否結束（給外部查詢用）")]public bool autoMoveFinished = false;
     float x; // 最後實際拿去移動用的輸入值
 
@@ -83,7 +83,7 @@ public class CControll : MonoBehaviour
                 autoMoveFinished = true;
 
                 // 把座標修正到目標（避免物理晃一下）
-                Vector2 pos = transform.position;
+                Vector3 pos = transform.position;
                 pos.x = Target.x;
                 transform.position = pos;
                 // 把剛才累積的速度清空，避免滑出去
@@ -141,7 +141,7 @@ public class CControll : MonoBehaviour
             // 自動移動：直接往目標靠近，不用 AddForce
             float step = moveSpeed * Time.fixedDeltaTime;
             Vector2 current = rig.position;
-            Vector2 target = new Vector2(Target.x, Target.y); // 只看 X
+            Vector2 target = new Vector2(Target.x, current.y); // 只看 X
 
             Vector2 newPos = Vector2.MoveTowards(current, target, step);
             rig.MovePosition(newPos);  // 或 transform.position = newPos 也行

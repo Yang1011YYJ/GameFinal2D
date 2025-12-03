@@ -1,16 +1,16 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DifferenceSpot : MonoBehaviour
 {
-    [Header("°é°é¹w¸mª«")]
-    public GameObject circlePrefab;      // «ü¨ì CircleMark.prefab
-    [Tooltip("°é°é­n©ñ¦b­ş­Ó UI ª¨ª¨¤U­±")]public RectTransform canvasRect;     // ³q±`©ì Canvas ©Î CircleLayer
+    [Header("åœˆåœˆé ç½®ç‰©")]
+    public GameObject circlePrefab;      // æŒ‡åˆ° CircleMark.prefab
+    [Tooltip("åœˆåœˆè¦æ”¾åœ¨å“ªå€‹ UI çˆ¸çˆ¸ä¸‹é¢")]public RectTransform canvasRect;     // é€šå¸¸æ‹– Canvas æˆ– CircleLayer
     bool found = false;
-    [Tooltip("­pºâ°é°é¼Æ¶q")]
-    public SpotManager manager;          // ¥Ñ Manager À°§A¶ë¶i¨Ó
+    [Tooltip("è¨ˆç®—åœˆåœˆæ•¸é‡")]
+    public SpotManager manager;          // ç”± Manager å¹«ä½ å¡é€²ä¾†
 
     public void OnClickSpot()
     {
@@ -18,24 +18,30 @@ public class DifferenceSpot : MonoBehaviour
         found = true;
 
         
-        GameObject circle = Instantiate(circlePrefab, canvasRect);// ¥Í¦¨°é°é¦bÂIªº¦ì¸m
-        // §â°é°éªº¦ì¸m¹ï»ô³o­Ó Spot
+        GameObject circle = Instantiate(circlePrefab, canvasRect);// ç”Ÿæˆåœˆåœˆåœ¨é»çš„ä½ç½®
+        // æŠŠåœˆåœˆçš„ä½ç½®å°é½Šé€™å€‹ Spot
         var spotRect = GetComponent<RectTransform>();
         var circleRect = circle.GetComponent<RectTransform>();
         circleRect.anchoredPosition = spotRect.anchoredPosition;
 
-        // ¼½°é°é¶ñº¡°Êµe
+        // æ’­åœˆåœˆå¡«æ»¿å‹•ç•«
         var filler = circle.GetComponent<CircleFill>();
         if (filler != null)
         {
             filler.Play();
         }
 
-        // ? §i¶DºŞ²z­û¡G§Ú³Q§ä¨ìÅo
+        // ? å‘Šè¨´ç®¡ç†å“¡ï¼šæˆ‘è¢«æ‰¾åˆ°å›‰
         if (manager != null)
         {
             manager.OnSpotFound(this);
         }
+    }
+
+    // ğŸ‘‡ å¦‚æœä¹‹å¾Œæœ‰è¦é‡è¤‡ä½¿ç”¨åŒä¸€å€‹ spotï¼Œå¯ä»¥å‘¼å«é€™å€‹é‚„åŸ
+    public void ResetSpot()
+    {
+        found = false;
     }
 }
 
