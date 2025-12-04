@@ -30,7 +30,8 @@ public class CControll : MonoBehaviour
     [Tooltip("自動移動是否結束（給外部查詢用）")]public bool autoMoveFinished = false;
     float x; // 最後實際拿去移動用的輸入值
 
-    
+    [Header("腳本")]
+    public First firstScript;
 
     void Awake()
     {
@@ -59,6 +60,8 @@ public class CControll : MonoBehaviour
         {
             rig = GetComponent<Rigidbody2D>();
         }
+
+        firstScript = FindAnyObjectByType<First>();
     }
     void Start()
     {
@@ -164,9 +167,8 @@ public class CControll : MonoBehaviour
         
     }
 
-    /// <summary>
+
     /// 給外部呼叫，開始自動走到某個 X 位置
-    /// </summary>
     public void StartAutoMoveTo(Vector2 Target)
     {
         this.Target = Target;
@@ -182,14 +184,18 @@ public class CControll : MonoBehaviour
         animator.SetBool("walk", true);
     }
 
-    /// <summary>
     /// 劇情結束後，恢復玩家控制
-    /// </summary>
     public void EnablePlayerControl()
     {
         playerControlEnabled = true;
         isAutoMoving = false;
     }
 
-    
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if(collider.tag == "ET1")//第一個觸發error地點
+        {
+            firstScript.eT1 = true;
+        }
+    }
 }

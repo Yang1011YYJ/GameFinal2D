@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\scripts\SpotManager.cs" />
+    <Compile Include="Assets\scripts\Zero.cs" />
     <Compile Include="Assets\scripts\AnimationScript.cs" />
     <Compile Include="Assets\scripts\First.cs" />
     <Compile Include="Assets\scripts\CircleFill.cs" />
@@ -90,6 +91,7 @@
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\DialogueSystem\Game\How To play Teach.txt" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />

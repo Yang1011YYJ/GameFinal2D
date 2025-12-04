@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - ET1
+  - ET2
+  - ET3
   layers:
   - Default
   - TransparentFX
@@ -70,6 +73,12 @@ TagManager:
     locked: 0
   - name: CC
     uniqueID: 2576163261
+    locked: 0
+  - name: Dia
+    uniqueID: 2132130149
+    locked: 0
+  - name: TeachHistory
+    uniqueID: 2033628127
     locked: 0
   - name: UI
     uniqueID: 639806117
