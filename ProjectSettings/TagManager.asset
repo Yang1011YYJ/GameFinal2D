@@ -47,6 +47,9 @@ TagManager:
   - name: BG2
     uniqueID: 2992994455
     locked: 0
+  - name: BG2-2
+    uniqueID: 115065757
+    locked: 0
   - name: New Layer 8
     uniqueID: 3397511429
     locked: 0

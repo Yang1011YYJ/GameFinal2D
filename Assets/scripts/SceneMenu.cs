@@ -23,6 +23,7 @@ public class SceneMenu : MonoBehaviour
     }
     public void SceneChangeToDes()
     {
+        BlackPanel.SetActive(true);
         animationScript.Fade(
             BlackPanel, 
             1.5f,
@@ -30,5 +31,6 @@ public class SceneMenu : MonoBehaviour
             1f,
             () => sceneChangeScript.SceneC("des")
         );
+        //BlackPanel.SetActive(false );
     }
 }

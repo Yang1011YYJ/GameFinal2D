@@ -1,7 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using static UnityEngine.GraphicsBuffer;
+using static UnityEngine.Rendering.DebugUI;
+using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.Rendering.Universal;
 
 public class First : MonoBehaviour
 {
@@ -16,6 +21,7 @@ public class First : MonoBehaviour
     [Tooltip("設定異常的位置組")] public GameObject ErrorPlace;
     [Tooltip("教學-設定異常的位置組")] public GameObject ErrorPlaceTeach;
     [Tooltip("教學-設定異常的圈圈")] public GameObject CirclePlaceTeach;
+    [Tooltip("異常光線")] public Light2D ErrorLight2D;
     public bool StartError;
 
     [Header("玩家")]
@@ -49,6 +55,8 @@ public class First : MonoBehaviour
         ErrorPlace.SetActive(false);
         CirclePlaceTeach.SetActive(false);
         ErrorPlaceTeach.SetActive(false);
+        ErrorLight2D.color = new Color(1, 0, 0, 0);
+
         // 整個場景流程交給協程控制，Start 只負責開頭
         StartCoroutine(SceneFlow());
 
@@ -90,6 +98,7 @@ public class First : MonoBehaviour
         // 1. 黑幕淡出
         if (BlackPanel != null)
         {
+            BlackPanel.SetActive(true);
             animationScript.Fade(
                 BlackPanel,
                 1.5f,
@@ -97,16 +106,52 @@ public class First : MonoBehaviour
                 0f,
                 null
             );
+            
             yield return new WaitForSeconds(1.5f);
+            BlackPanel.SetActive(false);
         }
     }
-    public void AbnormalLightOn()//讓窗外異常光線啟動（瞬間變紅、變亮）
+    public IEnumerator AbnormalLightOn(float duration)//讓窗外異常光線啟動（瞬間變紅、變亮）
     {
+        float timer = 0f;
+        Color c = ErrorLight2D.color;
+        c.a = 0f;
+        ErrorLight2D.color = c;
 
+        // 淡入
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            float t = timer / duration;
+            c.a = Mathf.Lerp(0, 1, t);
+            ErrorLight2D.color = c;
+
+            yield return null;
+        }
+
+        c.a = 1;
+        ErrorLight2D.color = c;
     }
-    public void AbnormalLightOff()//讓窗外異常光線關閉（瞬間變紅、變亮）
+    public IEnumerator AbnormalLightOff(float duration)//讓窗外異常光線關閉（瞬間變紅、變亮）
     {
+        float timer = 0f;
+        Color c = ErrorLight2D.color;
+        c.a = 1f;
+        ErrorLight2D.color = c;
 
+        // 淡入
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            float t = timer / duration;
+            c.a = Mathf.Lerp(1, 0, t);
+            ErrorLight2D.color = c;
+
+            yield return null;
+        }
+
+        c.a = 0;
+        ErrorLight2D.color = c;
     }
 
     //玩家抵達座位後開始教學：紅光閃爍＋允許玩家點異常
@@ -142,14 +187,19 @@ public class First : MonoBehaviour
             //StopCoroutine(warningCoroutine);
             warningCoroutine = null;
 
-            // 恢復正常光線
-            //AbnormalLightOff();
-            yield return new WaitForSeconds(1.5f);
+            
             if (ErrorPlaceTeach != null)
                 ErrorPlaceTeach.SetActive(false); // 關閉異常提示界面
             spotManager.ClearAllCircles();
             CirclePlaceTeach.SetActive(false);
             animationScript.Fade(ErrorPanel,2f,1f,0f,null);
+            yield return new WaitForSeconds(2f);
+            ErrorPanel.SetActive(false);
+
+            // 恢復正常光線
+            yield return new WaitForSeconds(0.5f);
+            StartCoroutine(AbnormalLightOff(2f));
+            yield return new WaitForSeconds(0.5f);
 
             // 可選：恢復玩家控制／進入下一段劇情
             if (cControllScript != null)
@@ -163,7 +213,8 @@ public class First : MonoBehaviour
     IEnumerator WindowWarningLoop()
     {
         Debug.Log("[First] 紅光閃爍啟動");
-
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(AbnormalLightOn(2f));
         //while (!teachFinished)
         //{
         //    // TODO：讓窗外變紅、閃爍一次
@@ -174,14 +225,14 @@ public class First : MonoBehaviour
         //    // TODO：紅光變暗 / 關閉
         //    AbnormalLightOff();
         Debug.Log("開始變紅");
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(0.5f);
         //}
         // 🔥 紅光閃完 → 顯示異常提示 Panel
         if (ErrorPlace != null)
         {
             Debug.Log("[First] 顯示異常提示畫面 ErrorPlace");
             ErrorPlaceTeach.SetActive(true);
-            //ErrorPanel.SetActive(true);
+            ErrorPanel.SetActive(true);
             animationScript.Fade(ErrorPanel, 2f, 0f, 1f, null);
             CirclePlaceTeach.SetActive(true);
             spotManager.RefreshActiveSpots();

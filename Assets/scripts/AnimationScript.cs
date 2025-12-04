@@ -17,7 +17,6 @@ public class AnimationScript : MonoBehaviour
     {
         CanvasGroup canvasGroup= panel.GetComponent<CanvasGroup>();
 
-        panel.SetActive(true);
         float timer = 0f;
         canvasGroup.alpha = start;
 
@@ -30,7 +29,6 @@ public class AnimationScript : MonoBehaviour
         }
 
         canvasGroup.alpha = end;
-        panel.SetActive(false);
 
         // 🔔 淡入做完，通知外面「可以下一步囉」
         onComplete?.Invoke();

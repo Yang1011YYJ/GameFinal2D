@@ -6,3 +6,7 @@ V1
 1:1,Assembly-CSharp,,o_,I_
 2:trainStartPoint,KL
 2:SceneFlow,F
+2:AbnormalLightOn,q
+2:duration,Z
+2:timer,b
+2:alpha,O

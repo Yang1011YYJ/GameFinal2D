@@ -131,12 +131,15 @@ public class desC : MonoBehaviour
 
         // 9. 
         Debug.Log("畫面再次淡出黑（可省略）");
+        BlackPanel.SetActive(true);
         animationScript.Fade(
             BlackPanel, 
             1f,
             0f,
             1f,
             ()=>sceneChangeScript.SceneC("00"));
+        yield return new WaitForSeconds(1f);
+        BlackPanel.SetActive(false);
 
         // 劇情全部跑完
         Debug.Log("劇情全部跑完");
