@@ -7,6 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 using static UnityEngine.Rendering.DebugUI;
 using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class First : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class First : MonoBehaviour
     public AnimationScript animationScript;
     public CControll cControllScript;
     [Tooltip("場景中負責計算找錯誤數量的管理員")]public SpotManager spotManager;
+    public DialogueSystemGame00 DSG00;
 
 
     [Header("異常相關")]
@@ -33,6 +35,13 @@ public class First : MonoBehaviour
     [Tooltip("教學是否已經結束（找到足夠異常後）")]public bool teachFinished = false;
     [Tooltip("這次教學要找到幾個異常才算完成")]public int teachNeedFound = 2;
 
+    [Header("手機 UI")]
+    [Tooltip("顯示在畫面上的手機介面 Panel")]
+    public GameObject PhonePanel;
+    [Tooltip("手機裡的『相機』按鈕")]
+    public UnityEngine.UI.Button CameraButton;
+    [Tooltip("紀錄玩家有沒有按相機")]public bool hasPressedCamera = false;
+
     [Header("其他")]
     public GameObject BlackPanel;//黑色遮罩
     [Tooltip("控制紅光閃爍的協程")] Coroutine warningCoroutine;
@@ -40,6 +49,7 @@ public class First : MonoBehaviour
     private void Awake()
     {
         animationScript = GetComponent<AnimationScript>();
+        DSG00 = FindAnyObjectByType<DialogueSystemGame00>();
         if (cControllScript == null)
         {
             cControllScript = FindAnyObjectByType<CControll>();
@@ -56,6 +66,11 @@ public class First : MonoBehaviour
         CirclePlaceTeach.SetActive(false);
         ErrorPlaceTeach.SetActive(false);
         ErrorLight2D.color = new Color(1, 0, 0, 0);
+
+        if (PhonePanel != null)
+            PhonePanel.SetActive(false);
+
+        hasPressedCamera = false;
 
         // 整個場景流程交給協程控制，Start 只負責開頭
         StartCoroutine(SceneFlow());
@@ -75,9 +90,32 @@ public class First : MonoBehaviour
             yield return new WaitUntil(() => cControllScript.autoMoveFinished);
         }
 
-        // 3. 開始教學
+        //2. 開始教學
         StartTeach();
 
+        //2.1紅光亮起
+        redLight();
+        yield return new WaitUntil(() => ErrorLight2D.color.a==1f);
+
+        //2.1對話
+        DSG00.StartDialogue(DSG00.TextfileHowToPlay);
+        yield return new WaitForSeconds(1f);
+
+        //2.2看手機
+        cControllScript.animator.SetBool("phone", true);
+        yield return StartCoroutine(WaitForAnimation(cControllScript.animator, "phone"));
+        //yield return new WaitForSeconds(0.5f);
+        hasPressedCamera = false;
+        // ⏳ 在這裡乖乖等玩家按
+        yield return new WaitUntil(() => hasPressedCamera);
+
+        // 玩家已經按了相機，可以收手機 UI、結束手機動畫
+        PhonePanel.SetActive(false);
+        cControllScript.animator.SetBool("phone", false);
+
+        //3.errorpanel亮起
+        // 🔥 紅光閃完 → 顯示異常提示 Panel
+        openErrorPanel();
     }
 
     // Update is called once per frame
@@ -170,7 +208,9 @@ public class First : MonoBehaviour
         {
             cControllScript.playerControlEnabled = false; // 教學期間先鎖住走動
         }
-
+    }
+    void redLight()
+    {
         // 開始紅光閃爍（等你之後實作 abnormal() 和 RecoverNormalLight()）
         warningCoroutine = StartCoroutine(WindowWarningLoop());
     }
@@ -178,6 +218,7 @@ public class First : MonoBehaviour
     //教學完成：停止紅光、恢復正常光線、之後可接下一段劇情
     IEnumerator OnTeachComplete()
     {
+        yield return new WaitForSeconds(3f);
         teachFinished = true;
         Debug.Log("[First] 教學完成：找到足夠異常，恢復正常光線");
 
@@ -225,9 +266,23 @@ public class First : MonoBehaviour
         //    // TODO：紅光變暗 / 關閉
         //    AbnormalLightOff();
         Debug.Log("開始變紅");
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(2.5f);
         //}
-        // 🔥 紅光閃完 → 顯示異常提示 Panel
+    }
+
+    IEnumerator WaitForAnimation(Animator animator, string stateName)
+    {
+        // 等到進入該動畫 state
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(stateName))
+            yield return null;
+
+        // 動畫還在播
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
+            yield return null;
+    }
+
+    public void openErrorPanel()
+    {
         if (ErrorPlace != null)
         {
             Debug.Log("[First] 顯示異常提示畫面 ErrorPlace");
@@ -240,5 +295,11 @@ public class First : MonoBehaviour
 
         // 🔥這裡開始允許玩家找錯誤（你本來系統自動會開始找）
         TeachStart = true;
+    }
+
+    public void OnCameraButtonClicked()
+    {
+        Debug.Log("[First] 玩家按下手機裡的相機按鈕");
+        hasPressedCamera = true;
     }
 }

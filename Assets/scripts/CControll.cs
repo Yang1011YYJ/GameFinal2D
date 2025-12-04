@@ -30,6 +30,8 @@ public class CControll : MonoBehaviour
     [Tooltip("自動移動是否結束（給外部查詢用）")]public bool autoMoveFinished = false;
     float x; // 最後實際拿去移動用的輸入值
 
+    
+
     void Awake()
     {
         // Animator
@@ -60,7 +62,7 @@ public class CControll : MonoBehaviour
     }
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -188,4 +190,6 @@ public class CControll : MonoBehaviour
         playerControlEnabled = true;
         isAutoMoving = false;
     }
+
+    
 }
