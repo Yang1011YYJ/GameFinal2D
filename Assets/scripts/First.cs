@@ -126,6 +126,10 @@ public class First : MonoBehaviour
 
         //5.開始倒數計時
         timer.StartCountdown(15);
+
+        //6.開始找錯
+        ErrorStart = true;
+        errorResultHandled = false;
     }
 
     // Update is called once per frame
@@ -138,14 +142,14 @@ public class First : MonoBehaviour
         // 🔎 檢查目前找到幾個異常
 
         //1. 成功條件：找到全部，且時間還沒負數
-        if (spotManager.foundCount >= spotManager.totalCount && timer.currentTime >= 0f)
+        if (ErrorStart && spotManager.foundCount >= spotManager.totalCount && timer.currentTime >= 0f)
         {
             errorResultHandled = true;
             ErrorStart = false;   // 關閉這一輪檢查
             timer.ForceEnd();
             StartCoroutine(OnErrorComplete()); // 通關
         }
-        else if(timer.currentTime <= 0f && spotManager.foundCount < spotManager.totalCount)//2. 失敗條件：時間 < 0 且還沒找完
+        else if(ErrorStart && timer.currentTime <= 0f && spotManager.foundCount < spotManager.totalCount)//2. 失敗條件：時間 < 0 且還沒找完
         {
             //遊戲失敗
             errorResultHandled = true;
@@ -278,7 +282,7 @@ public class First : MonoBehaviour
             animationScript.Fade(ErrorPanel, 2f, 0f, 1f, null);
             CirclePlaceTeach.SetActive(true);
             spotManager.RefreshActiveSpots();
-            ErrorStart = true;
+            
         }
     }
 
